@@ -6,4 +6,8 @@
     $create_table = isset($options['create_table']);
     $dry_run = isset($options['dry_run']);
     $help = isset($options['help']);
+
+    if($username === false || $host === false) {
+        exit "Error Username and Host required\n";
+    }
 ?>
