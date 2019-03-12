@@ -36,7 +36,7 @@
     if($create_table === true) {
         $servername = $options['h'];
         $username = $options['u'];
-        //$dbname = "users";
+        $dbname = "test";
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -52,27 +52,42 @@
 
     //Open file
     if($file === true) {
-        $file = fopen("webdictionary.txt", "r") or die("Unable to open file!");
+        $servername = $options['h'];
+        $username = $options['u'];
+        $dbname = "test";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $file = fopen($options['file'], "r") or die("Unable to open file!");
         fgets($file);
 
         //Go through the csv and insert records
         while($line = fgets($file)) {
+            //Skip if the line is empty
+            if(trim($line) == ""){
+                continue;
+            }
             //Split the record into individual cells
-            $line = explode($line, ",");
-    
+            $line = explode(",", $line);
+
             //Parse and format the Name cell
-            $line[0] = strtolower($line[0]);
+            $line[0] = trim(strtolower($line[0]));
             $line[0][0] = strtoupper($line[0][0]);
     
             //Parse and format the Surname cell
-            $line[1] = strtolower($line[1]);
+            $line[1] = trim(strtolower($line[1]));
             $line[1][0] = strtoupper($line[1][0]);
     
             //Parse and format the email cell
-            $line[2] = strtolower($line[2]);
+            $line[2] = trim(strtolower($line[2]));
 
             //If email is invalid skip the record and print an error
-            if (!filter_var($line[2], FILTER_VALIDATE_EMAIL)) {
+            if (filter_var($line[2], FILTER_VALIDATE_EMAIL) === false) {
                 echo "Invalid email format"; 
                 continue;
             }
@@ -89,6 +104,8 @@
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
         }
+
+        $conn->close();
     }
 
     function create_table($conn) {
