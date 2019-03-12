@@ -54,6 +54,41 @@
     if($file === true) {
         $file = fopen("webdictionary.txt", "r") or die("Unable to open file!");
         fgets($file);
+
+        //Go through the csv and insert records
+        while($line = fgets($file)) {
+            //Split the record into individual cells
+            $line = explode($line, ",");
+    
+            //Parse and format the Name cell
+            $line[0] = strtolower($line[0]);
+            $line[0][0] = strtoupper($line[0][0]);
+    
+            //Parse and format the Surname cell
+            $line[1] = strtolower($line[1]);
+            $line[1][0] = strtoupper($line[1][0]);
+    
+            //Parse and format the email cell
+            $line[2] = strtolower($line[2]);
+
+            //If email is invalid skip the record and print an error
+            if (!filter_var($line[2], FILTER_VALIDATE_EMAIL)) {
+                echo "Invalid email format"; 
+                continue;
+            }
+    
+            //Insert
+            $sql = "INSERT INTO MyGuests (`name`, surname, email)
+            VALUES ('".$line[0]."', '".$line[1]."', '".$line[2]."')";
+    
+            //Error checking
+            if ($conn->query($sql) === TRUE) {
+                echo "New record created successfully";
+            } 
+            else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }
     }
 
     function create_table($conn) {
