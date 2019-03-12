@@ -23,4 +23,13 @@
     if($user === false || $host === false) {
         exit("Error Username and Host required");
     }
+
+    $password;
+
+    if($pass === false) {
+        $password = "";
+    }
+    else {
+        $password = $options['p'];
+    }
 ?>
