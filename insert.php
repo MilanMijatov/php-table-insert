@@ -95,11 +95,13 @@
 
             //If email is invalid skip the record and print an error
             if (filter_var($line[2], FILTER_VALIDATE_EMAIL) === false) {
-                echo "Invalid email format\n";
+                echo "Invalid email format on record: ". $line[0]." ". $line[1]." ". $line[2]. "\n";
                 continue;
             }
+
+            echo "To be inserted: ". $line[0]." ". $line[1]." ". $line[2]. "\n";
             
-            if($dry_run === true) {
+            if($dry_run === false) {
                 insert_users($line[0], $line[1], $line[2], $conn);
             }
         }
@@ -112,7 +114,10 @@
 
         //Error checking
         if ($conn->query($sql) === false) {
-            echo "Error: " . $sql . "<br>" . $conn->error."\n";
+            print "Error Inserting\n";
+        }
+        else {
+            print "Inserted\n";
         }
     }
 
