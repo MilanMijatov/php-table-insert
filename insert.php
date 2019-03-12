@@ -64,12 +64,12 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
-        parse_file($servername, $username, $dbname, $conn, $filename);
+        parse_file($servername, $username, $dbname, $conn, $filename, $dry_run);
 
         $conn->close();
     }
 
-    function parse_file($servername, $username, $dbname, $conn, $filename) {
+    function parse_file($servername, $username, $dbname, $conn, $filename, $dry_run) {
         $file = fopen($filename, "r") or die("Unable to open file!");
         fgets($file);
 
@@ -95,11 +95,13 @@
 
             //If email is invalid skip the record and print an error
             if (filter_var($line[2], FILTER_VALIDATE_EMAIL) === false) {
-                echo "Invalid email format\n"; 
+                echo "Invalid email format\n";
                 continue;
             }
-    
-            insert_users($line[0], $line[1], $line[2], $conn);
+            
+            if($dry_run === true) {
+                insert_users($line[0], $line[1], $line[2], $conn);
+            }
         }
     }
 
