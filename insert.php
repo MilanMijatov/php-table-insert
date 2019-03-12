@@ -44,11 +44,6 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        // Drop table
-        $sql = " DROP TABLE users";
-        if ($conn->query($sql) === false) {
-            echo "Failed dropping table: " . $conn->error;
-        }
         create_table($conn);
         exit();
     }
@@ -66,6 +61,14 @@
         }
         else {
             echo "Error creating table: " . $conn->error;
+        }
+    }
+
+    function drop_table($conn) {
+        // Drop table
+        $sql = " DROP TABLE users";
+        if ($conn->query($sql) === false) {
+            echo "Failed dropping table: " . $conn->error;
         }
     }
 ?>
