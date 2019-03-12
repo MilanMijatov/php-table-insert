@@ -83,33 +83,34 @@
             $line = explode(",", $line);
 
             //Parse and format the Name cell
-            $line[0] = trim(strtolower($line[0]));
+            $line[0] = $conn->real_escape_string(trim(strtolower($line[0])));
             $line[0][0] = strtoupper($line[0][0]);
     
             //Parse and format the Surname cell
-            $line[1] = trim(strtolower($line[1]));
+            $line[1] = $conn->real_escape_string(trim(strtolower($line[1])));
             $line[1][0] = strtoupper($line[1][0]);
     
             //Parse and format the email cell
-            $line[2] = trim(strtolower($line[2]));
+            $line[2] = $conn->real_escape_string(trim(strtolower($line[2])));
 
             //If email is invalid skip the record and print an error
             if (filter_var($line[2], FILTER_VALIDATE_EMAIL) === false) {
-                echo "Invalid email format"; 
+                echo "Invalid email format\n"; 
                 continue;
             }
     
-            //Insert
-            $sql = "INSERT INTO users (`name`, surname, email)
-            VALUES ('".$line[0]."', '".$line[1]."', '".$line[2]."')";
-    
-            //Error checking
-            if ($conn->query($sql) === TRUE) {
-                echo "New record created successfully";
-            }
-            else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
-            }
+            insert_users($line[0], $line[1], $line[2], $conn);
+        }
+    }
+
+    function insert_users($line0, $line1, $line2, $conn) {
+        //Insert
+        $sql = "INSERT INTO users (`name`, surname, email)
+        VALUES ('".$line0."', '".$line1."', '".$line2."')";
+
+        //Error checking
+        if ($conn->query($sql) === false) {
+            echo "Error: " . $sql . "<br>" . $conn->error."\n";
         }
     }
 
