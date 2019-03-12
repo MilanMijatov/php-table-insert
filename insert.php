@@ -55,6 +55,7 @@
         $servername = $options['h'];
         $username = $options['u'];
         $dbname = "test";
+        $filename = $options['file'];
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -63,7 +64,13 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $file = fopen($options['file'], "r") or die("Unable to open file!");
+        parse_file($servername, $username, $dbname, $conn, $filename);
+
+        $conn->close();
+    }
+
+    function parse_file($servername, $username, $dbname, $conn, $filename) {
+        $file = fopen($filename, "r") or die("Unable to open file!");
         fgets($file);
 
         //Go through the csv and insert records
@@ -104,8 +111,6 @@
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
         }
-
-        $conn->close();
     }
 
     function create_table($conn) {
