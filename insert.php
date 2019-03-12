@@ -78,13 +78,13 @@
             }
     
             //Insert
-            $sql = "INSERT INTO MyGuests (`name`, surname, email)
+            $sql = "INSERT INTO users (`name`, surname, email)
             VALUES ('".$line[0]."', '".$line[1]."', '".$line[2]."')";
     
             //Error checking
             if ($conn->query($sql) === TRUE) {
                 echo "New record created successfully";
-            } 
+            }
             else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
