@@ -49,6 +49,11 @@
         if ($conn->query($sql) === false) {
             echo "Failed dropping table: " . $conn->error;
         }
+        create_table($conn);
+        exit();
+    }
+
+    function create_table($conn) {
         // Create database
         $sql = " CREATE TABLE users (
             `name` VARCHAR(50),
@@ -62,6 +67,5 @@
         else {
             echo "Error creating table: " . $conn->error;
         }
-        exit();
     }
 ?>
