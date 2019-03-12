@@ -44,7 +44,9 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+        drop_table($conn);
         create_table($conn);
+        $conn->close();
         exit();
     }
 
