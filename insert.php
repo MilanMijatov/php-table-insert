@@ -50,6 +50,12 @@
         exit();
     }
 
+    //Open file
+    if($file === true) {
+        $file = fopen("webdictionary.txt", "r") or die("Unable to open file!");
+        fgets($file);
+    }
+
     function create_table($conn) {
         // Create database
         $sql = " CREATE TABLE users (
