@@ -32,4 +32,36 @@
     else {
         $password = $options['p'];
     }
+
+    if($create_table === true) {
+        $servername = $options['h'];
+        $username = $options['u'];
+        //$dbname = "users";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        // Drop table
+        $sql = " DROP TABLE users";
+        if ($conn->query($sql) === false) {
+            echo "Failed dropping table: " . $conn->error;
+        }
+        // Create database
+        $sql = " CREATE TABLE users (
+            `name` VARCHAR(50),
+            surname VARCHAR(50),
+            email VARCHAR(50),
+            UNIQUE (email)
+            )";
+        if ($conn->query($sql) === true) {
+            echo "Table created successfully";
+        }
+        else {
+            echo "Error creating table: " . $conn->error;
+        }
+        exit();
+    }
 ?>
